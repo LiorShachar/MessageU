@@ -11,8 +11,12 @@ class Server:
     def listen(self,ip:str,port:int):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             print(f"{ip} Listening on port {port}")
-            s.
+            s.bind((ip,port))
+            s.listen()
+            handler = RequestHandler()
             while 1:
+                clientSocket, clientEndpoint = s.accept()
+                RequestHandler.HandleClient(clientSocket,clientEndpoint)
 
 
 
