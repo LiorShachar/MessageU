@@ -1,18 +1,10 @@
 import socket
-import struct
-import threading
-import Functions
+from Functions import *
+from Exceptions import ServerError
 from concurrent.futures import ThreadPoolExecutor
-from time import sleep
-from Request import RequestHeader
+from Request import *
 
-HEADER_SIZE = 22
-REQ_CODE_REGISTER = 100
-REQ_CODE_USER_LIST = 101
-REQ_CODE_PUBLIC_KEY = 102
-REQ_CODE_SEND_MESSAGE = 103
-
-#A Threaded task manager to handle all the requests and assign them to threads
+# A threaded task manager to handle all the requests and assign them to threads
 class RequestHandler:
 
     def __init__(self):
@@ -24,16 +16,25 @@ class RequestHandler:
             #print("Valid Header!")
             self.executor.submit(self.handle_request, header, client_socket)
 
+
     def handle_request(self, header : RequestHeader, client_socket: socket):
         print(f"Handling Request Code: {header.code}")
-        if header.code == REQ_CODE_REGISTER:
-            register_user()
-        if header.code == REQ_CODE_USER_LIST:
-            get_public_key()
-        if header.code == REQ_CODE_PUBLIC_KEY:
-            pull_messages()
-        if header.code == REQ_CODE_SEND_MESSAGE:
-            send_message()
+        try:
+            if header.code == REQ_CODE_REGISTER:
+                print(f"registering New User")
+                register_user()
+            if header.code == REQ_CODE_USER_LIST:
+                print(f"fetching user list For client:")
+                get_public_key()
+            if header.code == REQ_CODE_PUBLIC_KEY:
+                print(f"fetching public key For client:")
+                pull_messages()
+            if header.code == REQ_CODE_SEND_MESSAGE:
+                print(f"sending msg to client:")
+                send_message()
+        except ServerError:
+
+
 
     def read_header(self, client_socket: socket) -> RequestHeader:
         try:

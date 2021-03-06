@@ -26,12 +26,11 @@ class Server:
                 clients.append((clientSocket, clientEndpoint))
                 handler.handle_client(clientSocket, clientEndpoint)
 
-    def close():
-        pass
 
 def main():
     server = Server()
-    server.listen('127.0.0.1',50500);
+    server.listen('127.0.0.1', 50500);
+
 
 if __name__ == "__main__":
     main()
