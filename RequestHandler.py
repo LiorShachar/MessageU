@@ -33,7 +33,7 @@ class RequestHandler:
                 print(f"sending msg to client:")
                 send_message()
         except ServerError:
-
+            self.RespondWithError(code,client_socket)
 
 
     def read_header(self, client_socket: socket) -> RequestHeader:
@@ -47,6 +47,8 @@ class RequestHandler:
             return req
         except Exception:
             return None
+
+
 
 
 
